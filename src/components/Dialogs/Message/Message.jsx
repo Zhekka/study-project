@@ -4,17 +4,14 @@ import p from "../../Profile/ProfileInfo/ProfileInfo.module.css";
 
 function Message(props) {
 
-    // let newMessage = React.createRef();
-    //
-    // let addMessage = () =>{
-    //     let text = newMessage.current.value;
-    //     alert(text)
-    // }
 
     return (
         <div>
-            {/*<textarea ref={addMessage}>hi</textarea>*/}
-        <div className={d.message}>{props.message}</div>
+
+        <div className={d.message}>
+            <textarea>{props.message}</textarea>
+
+        </div>
         </div>
     );
 }
