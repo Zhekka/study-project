@@ -1,27 +1,25 @@
 import React from "react";
 import p from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {addPostActionCreator, updateNewPostTextActionCreator} from "../../../redux/profile-reducer";
 
-
+// ctrl+alt+V create new variable
 
 function MyPosts(props) {
 
-    let postsElements = props.postsData.map((data) => {
+    let postsElements = props.post.map((data) => {
             return <Post message={data.message} like={data.likesCount}/>
         }
     );
 
     let newPostElement = React.createRef();
 
-    let addPost = () => {
-        props.dispatch(addPostActionCreator())
+    let onAddPost = () => {
+        props.addPost();
     }
 
     let onPostChange = () =>{
         let text = newPostElement.current.value;
-        let action = updateNewPostTextActionCreator(text);
-        props.dispatch(action)// ctrl+alt+V create new variable
+        props.updateNewPostText(text);
     }
 
 
@@ -31,7 +29,7 @@ function MyPosts(props) {
                 <div>
                     <textarea onChange={onPostChange} ref={newPostElement} value={props.newPostText} />
                     <div>
-                        <button onClick={addPost}>Add post
+                        <button onClick={onAddPost}>Add post
                         </button>
                         <button>Remove</button>
                     </div>
