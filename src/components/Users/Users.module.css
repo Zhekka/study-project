@@ -10,3 +10,8 @@
 .padd{
     padding: 2px;
 }
+.preloader {
+    display: block;
+    /*margin: 0 auto;*/
+    width: 200px;
+}
