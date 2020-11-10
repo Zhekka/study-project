@@ -1,0 +1,12 @@
+.img img{
+    width: 50px;
+}
+.selectedPage{
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.padd{
+    padding: 2px;
+}
