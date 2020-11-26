@@ -1,3 +1,5 @@
+import {usersAPI} from "../api/api";
+
 const FOLLOW = 'FOLLOW'
 const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
@@ -7,48 +9,6 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS'
 
 let initialState = {
-    // users: [
-    //     {
-    //         id: 1,
-    //         photoUrl: 'https://img2.pngio.com/avatar-ninja-samurai-warrior-icon-ninja-avatar-png-512_512.png',
-    //         followed: true,
-    //         fullName: 'Dmitry',
-    //         status: 'Im a boss',
-    //         location: {city: 'Minsk', country: 'Belarus'}
-    //     },
-    //     {
-    //         id: 2,
-    //         photoUrl: 'https://img2.pngio.com/avatar-ninja-samurai-warrior-icon-ninja-avatar-png-512_512.png',
-    //         followed: false,
-    //         fullName: 'Zhenya',
-    //         status: 'Happy now',
-    //         location: {city: 'Kiev', country: 'Ukraine'}
-    //     },
-    //     {
-    //         id: 3,
-    //         photoUrl:'https://img2.pngio.com/avatar-ninja-samurai-warrior-icon-ninja-avatar-png-512_512.png',
-    //         followed: false,
-    //         fullName: 'Petro',
-    //         status: 'This is me!',
-    //         location: {city: 'New York', country: 'USA'}
-    //     },
-    //     {
-    //         id: 4,
-    //         photoUrl:'https://img2.pngio.com/avatar-ninja-samurai-warrior-icon-ninja-avatar-png-512_512.png',
-    //         followed: false,
-    //         fullName: 'Bill',
-    //         status: 'i have never seen this car before!',
-    //         location: {city: 'Vinnitsa', country: 'Ukraine'}
-    //     },
-    //     {
-    //         id: 5,
-    //         photoUrl:'https://img2.pngio.com/avatar-ninja-samurai-warrior-icon-ninja-avatar-png-512_512.png',
-    //         followed: true,
-    //         fullName: 'Alex',
-    //         status: 'This is my first job',
-    //         location: {city: 'Krakow', country: 'Poland'}
-    //     },
-    //
     users: [],
     pageSize: 5,
     totalUsersCount: 0,
@@ -106,13 +66,55 @@ const usersReducer = (state = initialState, action) => {
     }
 }
 
-export const followAC = (userId) => ({type: FOLLOW, userId})
-export const unFollowAC = (userId) => ({type: UNFOLLOW, userId})
+export const followSuccess = (userId) => ({type: FOLLOW, userId})
+export const unfollowSuccess = (userId) => ({type: UNFOLLOW, userId})
 export const setUsersAC = (users) => ({type: SET_USERS, users})
 export const setCurrentPageAC = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage})
 export const setUsersTotalCountAC = (totalUsersCount) => ({type: SET_TOTAL_USERS_COUNT, totalUsersCount})
 export const setIsFetchingAC = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
-export const toggleFollowingProgress = (isFetching,userId) => ({type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId})
+export const toggleFollowingProgress = (isFetching, userId) => ({
+    type: TOGGLE_IS_FOLLOWING_PROGRESS,
+    isFetching,
+    userId
+})
 
+export const getUsersThunkCreator = (currentPage, pageSize) => {
+    return (dispatch) => {
+        dispatch(setIsFetchingAC(true))
+        usersAPI.getUsers(currentPage, pageSize)
+            .then(data => {
+                dispatch(setIsFetchingAC(false))
+                dispatch(setUsersAC(data.items))
+                dispatch(setUsersTotalCountAC(data.totalCount))
+            });
+    }
+}
+
+export const follow = (userId) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingProgress(true, userId));
+        usersAPI.follow(userId)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    dispatch(followSuccess(userId))
+                }
+                dispatch(toggleFollowingProgress(false, userId));
+            })
+    }
+}
+
+export const unfollow = (userId) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingProgress(true, userId));
+        usersAPI.unfollow(userId)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    dispatch(unfollowSuccess(userId))
+                }
+                dispatch(toggleFollowingProgress(false, userId));
+
+            })
+    }
+}
 
 export default usersReducer;
