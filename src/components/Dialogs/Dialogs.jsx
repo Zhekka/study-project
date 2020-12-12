@@ -3,6 +3,7 @@ import d from './Dialogs.module.css'
 import DialogItem from "./DialogItem/DiaogItem";
 import Message from "./Message/Message";
 import {sendMessageCreator, updateNewMessageBodyCreator} from "../../redux/dialogs-reducer";
+import {Redirect} from "react-router-dom";
 
 
 function Dialogs(props) {
@@ -27,6 +28,7 @@ function Dialogs(props) {
         let body = e.target.value
         props.updateNewMessageBody(body)
     }
+
 
     return (
         <div className={d.dialogs}>

@@ -38,7 +38,7 @@ export const getAuthUserData = ()=>{
 
 
                 } else {
-                    alert('You are not authorise!')
+                    //alert('You are not authorise!')
                     //console.log('you are not authorise!')
                 }
             });
