@@ -11,11 +11,10 @@ class ProfileContainer extends React.Component {
     componentDidMount() {
         let userId = this.props.match.params.userId
         if (!userId) {
-            userId = 2
+            userId = 3
         }
         this.props.getUserProfile(userId);
     }
-
     render() {
 
         return (<div>
@@ -33,7 +32,7 @@ let mapStateToProps = (state) => ({
 let compotic = compose(
     connect(mapStateToProps, {getUserProfile}),
     withRouter,
-    withAuthRedirect
+    //withAuthRedirect
 )(ProfileContainer)
 
 // let AuthRedirectComponent = withAuthRedirect(ProfileContainer);
